@@ -1,5 +1,5 @@
 import React from "react"
-
+import "./index.css"
  class MemeGenerator extends React.Component{
     constructor(){
         super()
@@ -9,6 +9,8 @@ import React from "react"
             randomImg: "http://i.imgflip.com/1bij.jpg"
 
         }
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount(){
@@ -20,36 +22,45 @@ import React from "react"
             })
     }
     
-    handleChange(){
-        event [name] = event.target(value)
+    handleChange(event) {
+        const {name, value} = event.target
+        this.setState({ [name]: value })
 
-        this.setState({
-            [name]: value
-        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault()
+        const randNum = Math.floor(Math.random() * this.state.allMemeImgs.length)
+        const randMemeImg = this.state.allMemeImgs[randNum].url
+        this.setState({ randomImg: randMemeImg })
     }
 
     render(){
         return(
             <div>
-                <form className="meme-form">   
+                <form className="meme-form" onSubmit={this.handleSubmit}>   
                     <input 
-                        name="topText"  
-                        placeholder="Top Text" 
-                        type="text" 
-                        onChange={this.handleChange} 
-                        value = {this.state.topText}
-                    />
-
+                        type="text"
+                        name="topText"
+                        placeholder="Top Text"
+                        value={this.state.topText}
+                        onChange={this.handleChange}
+                    /> 
                     <input 
-                        name="bottomText" 
-                        palceholder="Bottom Text" 
-                        type="text" 
-                        onChange={this.handleChange} 
-                        value = {this.state.bottomText}
-                    />
+                        type="text"
+                        name="bottomText"
+                        placeholder="Bottom Text"
+                        value={this.state.bottomText}
+                        onChange={this.handleChange}
+                    /> 
 
                     <button>Gen</button>
                 </form>
+                <div className="meme">
+                    <img src={this.state.randomImg} alt="" />
+                    <h2 className="top">{this.state.topText}</h2>
+                    <h2 className="bottom">{this.state.bottomText}</h2>
+                </div>
             </div>
         )
     }
